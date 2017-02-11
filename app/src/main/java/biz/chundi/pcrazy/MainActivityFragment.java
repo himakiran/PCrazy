@@ -1,18 +1,22 @@
 package biz.chundi.pcrazy;
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import static biz.chundi.pcrazy.R.id.fragment;
 import static biz.chundi.pcrazy.R.id.gv;
-import static biz.chundi.pcrazy.R.layout.fragment_main;
+import static biz.chundi.pcrazy.R.layout.content_main;
+
+import android.content.Intent;
 
 /**
  * Created by userhk on 09/02/17.
@@ -26,10 +30,9 @@ public class MainActivityFragment extends Fragment {
     public Context c;
     public MainActivityFragment() {
 
-    }
-    public void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);}
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle state) {
@@ -42,9 +45,11 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // first we get the rootView
+        Intent intent = this.getActivity().getIntent();
+        searchString = intent.getStringExtra("searchSTR");
 
-        View rootView = inflater.inflate(fragment_main, container, false);
+        // first we get the rootView
+        View rootView = inflater.inflate(content_main, container, true);
 
 
         // The we use the rootview to get the gridview

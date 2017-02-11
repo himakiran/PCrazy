@@ -26,7 +26,7 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater inflater;
     private int[] movIDArray;
-    private String searchString;
+    private String searchString = "mithun";
     public ImageAdapter IMG;
     public GridView gridview;
 

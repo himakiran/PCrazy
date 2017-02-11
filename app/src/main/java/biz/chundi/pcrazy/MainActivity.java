@@ -1,23 +1,37 @@
 package biz.chundi.pcrazy;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
+import static android.R.id.message;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+import static java.security.AccessController.getContext;
+
 public class MainActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -26,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         //Log.v("chk-bool",String.valueOf(isConnected));
         if (isConnected) {
             //Log.v("chk-fetch", "chk-isconn");
+
+            setContentView(R.layout.activity_main);
 
 
         } else {
@@ -43,5 +59,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void displayImg(View view){
+
+
+        /*
+            Retrieving search term input by user
+         */
+        EditText editText = (EditText) findViewById(R.id.SearchString);
+        String ss = editText.getText().toString();
+        /*
+        Passing the search term to and calling DisplayAactivity
+         */
+
+        Intent intent = new Intent(this, DisplayActivity.class);
+        intent.putExtra("searchSTR", ss);
+        startActivity(intent);
     }
 }

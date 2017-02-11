@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="biz.chundi.pcrazy.MainActivity">
 
-    <TextView
+    <EditText
+        android:id="@+id/SearchString"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="Search...."
@@ -23,7 +24,7 @@
         android:layout_marginRight="10dp"
         android:backgroundTintMode="src_over"
         android:backgroundTint="@color/colorAccent"
-        android:ellipsize="marquee" />
+         />
 
     <Button
         android:text="Search"
@@ -31,5 +32,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/button"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="displayImg"/>
 </RelativeLayout>
