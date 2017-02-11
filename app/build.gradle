@@ -15,7 +15,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            it.buildConfigField 'String', 'GOOGLE_CUSTOM_SEARCH_API_KEY', googleCustomSearchApiKey
         }
+    }
+    buildTypes.each {
+        it.buildConfigField 'String', 'GOOGLE_CUSTOM_SEARCH_API_KEY', googleCustomSearchApiKey
     }
 }
 
@@ -25,5 +29,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
 }
