@@ -16,10 +16,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             it.buildConfigField 'String', 'GOOGLE_CUSTOM_SEARCH_API_KEY', googleCustomSearchApiKey
+            it.buildConfigField 'String', 'GOOGLE_CUSTOM_SEARCH_ID', googleCustomSearchCx
+            it.buildConfigField 'String', 'BING_IMAGE_SEARCH_API_KEY', bingImageSearchAPI
         }
     }
     buildTypes.each {
         it.buildConfigField 'String', 'GOOGLE_CUSTOM_SEARCH_API_KEY', googleCustomSearchApiKey
+        it.buildConfigField 'String', 'GOOGLE_CUSTOM_SEARCH_ID', googleCustomSearchCx
+        it.buildConfigField 'String', 'BING_IMAGE_SEARCH_API_KEY', bingImageSearchAPI
     }
 }
 

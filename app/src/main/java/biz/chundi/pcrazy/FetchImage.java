@@ -5,12 +5,19 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+
+import static android.os.Build.ID;
 
 /**
  * Created by userhk on 10/02/17.
@@ -21,6 +28,7 @@ public class FetchImage extends AsyncTask<String, String, Wrapper> {
     // Will contain the raw JSON response as a string.
     private String imagesJSONString;
     public String[] imageUrlArray;
+    public String[] thumbUrlArray;
     public int[] imageIDArray;
 
     private Context fcontext;
@@ -55,29 +63,34 @@ public class FetchImage extends AsyncTask<String, String, Wrapper> {
 
         try {
             /*
-            Google custom image search URL
+            BING image search URL
 
-            https://www.googleapis.com/customsearch/v1?key=AIzaSyAe_HCffeEuTeXvXdqGrDzvkCBw8pNReJQ&cx=006773999774991798198:p14zg8dtwuo&q=sridevi&searchType=image
+            https://api.cognitive.microsoft.com/bing/v5.0/images/search
+*/
 
-
-                         */
             Uri.Builder imageURL = new Uri.Builder();
-            String mUrl = "www.googleapis.com";
+            String mUrl = "api.cognitive.microsoft.com";
             imageURL.scheme("https")
                     .authority(mUrl)
-                    .appendPath("customsearch")
-                    .appendPath("v1")
-                    .appendQueryParameter("api_key", BuildConfig.GOOGLE_CUSTOM_SEARCH_API_KEY)
-                    .appendQueryParameter("cx","006773999774991798198:p14zg8dtwuo")
-                    .appendQueryParameter("q",search_term)
-                    .appendQueryParameter("searchType","image");
+                    .appendPath("bing")
+                    .appendPath("v5.0")
+                    .appendPath("images")
+                    .appendPath("search")
+                    .appendQueryParameter("q",search_term);
+
+
 
             // Create the request to OpenWeatherMap, and open the connection
             URL url = new URL(imageURL.build().toString());
+
             Log.v("CHK-IMAGE-URL",url.toString());
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Content-Type", "multipart/form-data");
+            urlConnection.setRequestProperty("Ocp-Apim-Subscription-Key",BuildConfig.BING_IMAGE_SEARCH_API_KEY);
+
+
             urlConnection.connect();
 
             // Read the input stream into a String
@@ -104,6 +117,7 @@ public class FetchImage extends AsyncTask<String, String, Wrapper> {
                 Log.v("chk-buffer","buffer length is zero");
             }
             imagesJSONString = buffer.toString();
+
             Log.v("CHK-FETCH", imagesJSONString);
         } catch (IOException e) {
             Log.e("MainActivityFragment", "Error ", e);
@@ -126,12 +140,13 @@ public class FetchImage extends AsyncTask<String, String, Wrapper> {
 
         try {
             Log.v("CHK-MOV-JSON-STR", imagesJSONString);
-            //getImageURLsMovieIDs(imagesJSONString);
+            getImageURLsImageIDs(imagesJSONString);
         } catch (Exception e) {
             Log.e("CHK-DO-IN-BACKGROUND", "CHK-GET-IMG-URL", e);
         }
         Wrapper w = new Wrapper();
         w.setWrapperImgUrl(imageUrlArray);
+        w.setWrapperThumbUrl(thumbUrlArray);
         w.setWrapperImgId(imageIDArray);
         return w;
 
@@ -148,6 +163,73 @@ public class FetchImage extends AsyncTask<String, String, Wrapper> {
 
     }
 
+    private void getImageURLsImageIDs(String imgStr){
+
+        JSONObject itemObject;
+        JSONObject imgObject;
+        String imgPath;
+        URL imgUrl;
+        URL thumbUrl;
+
+        String iUrl;
+        URL[] imageURLs;
+        URL[] thumbURLs;
 
 
-}
+        int imgID;
+
+
+        try {
+            JSONObject imageJson = new JSONObject(imgStr);
+            JSONArray itemsJsonArray = imageJson.getJSONArray("items");
+            imageURLs = new URL[itemsJsonArray.length()];
+            thumbURLs = new URL[itemsJsonArray.length()];
+
+            imageUrlArray = new String[itemsJsonArray.length()];
+            imageIDArray = new int[itemsJsonArray.length()];
+            thumbUrlArray = new String[itemsJsonArray.length()];
+            for (int i = 0; i < itemsJsonArray.length(); i++) {
+                itemObject = itemsJsonArray.getJSONObject(i);
+                try {
+                    imgUrl = new URL(itemObject.getString("link"));
+                }
+                catch(java.net.MalformedURLException e) {
+                    Log.e("CHK-MALFORM-URL", "IMAGE-URL", e);
+                    imgUrl = null;
+                }
+                imgObject = itemObject.getJSONObject("image");
+                try {
+                    thumbUrl = new URL(imgObject.getString("thumbnailLink"));
+                }
+                catch(java.net.MalformedURLException e) {
+                    Log.e("CHK-MALFORM-URL", "THUMB-URL", e);
+                    thumbUrl = null;
+                }
+
+                imgID = i;
+
+
+
+                imageURLs[i] = imgUrl;
+                thumbURLs[i] = thumbUrl;
+                imageUrlArray[i] = imgUrl.toString();
+                thumbUrlArray[i] = thumbUrl.toString();
+                imageIDArray[i] = imgID;
+
+
+            }
+
+
+        } catch (JSONException j) {
+            Log.e("CHK-JSON-ISSUE", "json-object", j);
+
+
+        }
+
+    }
+
+    }
+
+
+
+

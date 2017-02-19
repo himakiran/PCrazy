@@ -11,16 +11,21 @@ package biz.chundi.pcrazy;
 public class Wrapper {
     private int[] w_imageIDArray;
     private String[] w_imageUrlArray;
+    private String[] w_thumbUrlArray;
     public int[]getWrapperImgId(){
         return w_imageIDArray;
     }
     public String[] getWrapperImgUrl(){
         return w_imageUrlArray;
     }
+    public String[] getWrapperThumbUrl() { return w_thumbUrlArray;}
     public void setWrapperImgId(int[] i){
         this.w_imageIDArray = i;
     }
     public void setWrapperImgUrl(String[] s){
         this.w_imageUrlArray = s;
+    }
+    public void setWrapperThumbUrl(String[] s){
+        this.w_thumbUrlArray = s;
     }
 }

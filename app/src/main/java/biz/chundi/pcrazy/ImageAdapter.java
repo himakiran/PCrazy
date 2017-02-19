@@ -42,7 +42,7 @@ public class ImageAdapter extends BaseAdapter {
 
         try {
 
-                mThumbIds = fetch.execute(searchString).get().getWrapperImgUrl();
+                mThumbIds = fetch.execute(searchString).get().getWrapperThumbUrl();
 
 
             }
